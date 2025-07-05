@@ -1,0 +1,7 @@
+heart Disease prediction
+
+Algorithm / Model Used: Decision Tree Classifier
+
+Accuracy score: 0.9610
+
+
