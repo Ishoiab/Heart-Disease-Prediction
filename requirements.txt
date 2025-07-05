@@ -1,16 +1,5 @@
-pip install pandas
-
-pip install numpy 
-
-pip install scikit-learn==0.23.1
-
-pip install flask
-
-pip install matplotlib
-
-
-<<<<<<< HEAD
-python 3.8
-=======
-python 3.8
->>>>>>> dfdd151a164b000e7a85421a1789f7fc5f2439d0
+flask
+pandas
+numpy
+scikit-learn==0.23.1
+matplotlib
