@@ -68,22 +68,33 @@ def prediction():
 
 
 
-@app.route('/predict',methods=['POST'])
+@app.route('/predict', methods=['POST'])
 def predict():
-	int_feature = [x for x in request.form.values()]
-	 
-	final_features = [np.array(int_feature)]
-	 
-	result=heart.predict(final_features)
-	if result == 1:
-			result = "Positive"
-	else:
-		result = 'Negative'
-	
-	return render_template('prediction.html', prediction_text= result)
-@app.route('/performance')
-def performance():
-	return render_template('performance.html')   
+    try:
+        # 1. Get all form values and convert to float
+        form_values = [float(x) for x in request.form.values()]
+        
+        # 2. Load model and training column structure
+        import json
+        model = pickle.load(open('heartd.pkl', 'rb'))
+        with open('columns.json', 'r') as f:
+            model_columns = json.load(f)
+
+        # 3. Convert to DataFrame and reindex to match training
+        df = pd.DataFrame([form_values], columns=model_columns)
+        df = df.reindex(columns=model_columns, fill_value=0)
+
+        # 4. Predict
+        result = model.predict(df)[0]
+        output = "Positive" if result == 1 else "Negative"
+
+        # 5. Return prediction
+        return render_template('prediction.html', prediction_text=output)
+
+    except Exception as e:
+        print("❌ Prediction error:", e)
+        return f"Internal Server Error: {e}", 500
+
     
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=10000)
